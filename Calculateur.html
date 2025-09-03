@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Prêt Hypothécaire</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #monthlyPaymentResult {
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px solid #28a745;
+            background-color: #e6ffe6;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            color: #28a745;
+            display: none; 
+        }
+        .error-message {
+            color: #dc3545;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculateur de Prêt Hypothécaire</h1>
+
+        <div class="form-group">
+            <label for="loanAmount">Montant du prêt (P):</label>
+            <input type="number" id="loanAmount" placeholder="Ex: 200000">
+        </div>
+
+        <div class="form-group">
+            <label for="annualInterestRate">Taux d'intérêt annuel (%):</label>
+            <input type="number" id="annualInterestRate" step="0.01" placeholder="Ex: 5.0 (pour 5%)">
+        </div>
+
+        <div class="form-group">
+            <label for="loanTermYears">Durée du prêt (années):</label>
+            <input type="number" id="loanTermYears" min="1" step="1" placeholder="Ex: 30">
+        </div>
+
+        <button onclick="calculateLoan()">Calculer Paiement Mensuel</button>
+
+        <p id="monthlyPaymentResult"></p>
+        <p id="errorMessage" class="error-message"></p>
+
+    </div>
+
+    <script>
+        function calculateLoan() {
+            const loanAmountInput = document.getElementById('loanAmount');
+            const annualInterestRateInput = document.getElementById('annualInterestRate');
+            const loanTermYearsInput = document.getElementById('loanTermYears');
+            const monthlyPaymentResult = document.getElementById('monthlyPaymentResult');
+            const errorMessage = document.getElementById('errorMessage');
+
+            monthlyPaymentResult.style.display = 'none';
+            errorMessage.style.display = 'none';
+            errorMessage.textContent = '';
+            monthlyPaymentResult.textContent = '';
+
+            const P = parseFloat(loanAmountInput.value); 
+            const annualRatePercent = parseFloat(annualInterestRateInput.value); 
+            const years = parseFloat(loanTermYearsInput.value);
+
+            
+            if (isNaN(P) || isNaN(annualRatePercent) || isNaN(years) || P <= 0 || annualRatePercent < 0 || years <= 0) {
+                errorMessage.textContent = "Erreur : Veuillez saisir des valeurs numériques positives et valides pour tous les champs.";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            const annualRateDecimal = annualRatePercent / 100;
+            const r = annualRateDecimal / 12; 
+            
+            const n = years * 12;
+
+            let M; 
+
+            if (r === 0) {
+                M = P / n;
+            } else {
+                
+                const numerator = r * Math.pow((1 + r), n);
+                const denominator = Math.pow((1 + r), n) - 1;
+
+                if (denominator === 0) {
+                    errorMessage.textContent = "Erreur de calcul : Le dénominateur de la formule est zéro. Vérifiez les entrées.";
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                M = P * (numerator / denominator);
+            }
+
+            monthlyPaymentResult.textContent = "Paiement mensuel: " + M.toFixed(2) + " €";
+            monthlyPaymentResult.style.display = 'block';
+
+            console.log("Montant du prêt (P):", P);
+            console.log("Taux annuel (%):", annualRatePercent);
+            console.log("Durée (années):", years);
+            console.log("Taux mensuel (r):", r);
+            console.log("Nombre total de paiements (n):", n);
+            console.log("Paiement mensuel (M):", M.toFixed(2));
+        }
+    </script>
+</body>
+</html>

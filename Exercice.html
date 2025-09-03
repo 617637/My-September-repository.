@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ <title> My First Javascript code</title> 
+</head>
+
+<body>
+    <h1>Exercice 1: Manipulation de Chaînes de Caractères</h1>
+    <p>Ouvrez la console de votre navigateur (F12 ou Ctrl+Shift+I) pour voir les résultats.</p>
+    <script>
+
+        let maPhrase = "Ceci est une phrase pour l'exercice de manipulation de chaînes.";
+        console.log("Phrase originale:", maPhrase);
+        console.log("Longueur de la chaîne:", maPhrase.length);
+        let phraseMajuscules = maPhrase.toUpperCase();
+        console.log("Chaîne en majuscules:", phraseMajuscules);
+        let sousChaine = maPhrase.substring(9, 18);
+        console.log("Sous-chaîne extraite (de l'index 9 à 17):", sousChaine);
+        let startIndex = maPhrase.indexOf("exercice");
+        if (startIndex !== -1) {
+            let motExtrait = maPhrase.substring(startIndex, startIndex + "exercice".length);
+            console.log("Mot extrait 'exercice':", motExtrait);
+        }
+    </script>
+</body>
+
+
+
+
+</html>
